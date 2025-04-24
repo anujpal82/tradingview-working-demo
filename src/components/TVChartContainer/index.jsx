@@ -15,7 +15,6 @@
 		const defaultProps = {
 			symbol: 'NIFTY:13',
 			interval: 'D',
-			datafeedUrl: 'https://demo_feed.tradingview.com',
 			libraryPath: '/charting_library/',
 			// chartsStorageUrl: 'https://saveload.tradingview.com',
 			chartsStorageApiVersion: '1.1',
@@ -67,51 +66,51 @@
 
 					button.innerHTML = 'Check API';
 				});
-				const levels = [
-					{ price: 24000, text: "R1", color: "#FF0000" },
-					{ price: 26000, text: "R2", color: "#FF0000" },
-					{ price: 21757, text: "Bottom", color: "#0000FF" },
-					{ price: 22000, text: "S1", color: "#00FF00" },
-					{ price: 22344, text: "S2", color: "#00FF00" }
-				];
-				const chart = tvWidget.chart();
-				const drawLevels = (chartInstance) => {
-					levels.forEach((level) => {
-						chartInstance.createShape(
-							{ price: level.price },
-							{
-								shape: "horizontal_line",
-								lock: true,
-								disableSelection: false,
-								disableSave: false,
-								disableUndo: false,
-								text: level.text,
-								overrides: {
-									linecolor: level.color,
-									linestyle: 0,
-									linewidth: 2,
-									showLabel: true,
-									textcolor: level.color,
-									fontsize: 12,
-								},
-							}
-						);
-					});
-				};
+				// const levels = [
+				// 	{ price: 24000, text: "R1", color: "#FF0000" },
+				// 	{ price: 26000, text: "R2", color: "#FF0000" },
+				// 	{ price: 21757, text: "Bottom", color: "#0000FF" },
+				// 	{ price: 22000, text: "S1", color: "#00FF00" },
+				// 	{ price: 22344, text: "S2", color: "#00FF00" }
+				// ];
+				// const chart = tvWidget.chart();
+				// const drawLevels = (chartInstance) => {
+				// 	levels.forEach((level) => {
+				// 		chartInstance.createShape(
+				// 			{ price: level.price },
+				// 			{
+				// 				shape: "horizontal_line",
+				// 				lock: true,
+				// 				disableSelection: false,
+				// 				disableSave: false,
+				// 				disableUndo: false,
+				// 				text: level.text,
+				// 				overrides: {
+				// 					linecolor: level.color,
+				// 					linestyle: 0,
+				// 					linewidth: 2,
+				// 					showLabel: true,
+				// 					textcolor: level.color,
+				// 					fontsize: 12,
+				// 				},
+				// 			}
+				// 		);
+				// 	});
+				// };
 				
-				// Initial draw
-				drawLevels(chart);
+				// // Initial draw
+				// drawLevels(chart);
 				
     
-				// Draw the horizontal line at price 22000
-				chart.onSymbolChanged().subscribe(null, () => {
-					console.log("Symbol changed");
+				// // Draw the horizontal line at price 22000
+				// chart.onSymbolChanged().subscribe(null, () => {
+				// 	console.log("Symbol changed");
 
-					chart.onDataLoaded().subscribe(null, () => {
-						console.log("Data loaded for new symbol, drawing levels");
-						drawLevels(chart);
-					});
-				});
+				// 	chart.onDataLoaded().subscribe(null, () => {
+				// 		console.log("Data loaded for new symbol, drawing levels");
+				// 		drawLevels(chart);
+				// 	});
+				// });
 				
 				  
 			});

@@ -1,13 +1,13 @@
-export const getExchangeSegment = (EXCH_ID, SEGMENT) => {
+export const getExchangeSegment = (EXCH_ID, SEGMENT,INSTRUMENT) => {
     if (EXCH_ID === 'BSE' && SEGMENT === 'D') {
       return 'BSE_FNO';
     }
     if (EXCH_ID === 'NSE' && SEGMENT === 'D') {
       return 'NSE_FNO';
     }
-    if (EXCH_ID === 'NSE' && SEGMENT === 'C') {
-      return 'NSE_EQ';
-    }
+    // if (EXCH_ID === 'NSE' && SEGMENT === 'C' &&INSTRUMENT==="INDEX" ) {
+    //   return 'IDX_I';
+    // }
     if(SEGMENT==="I"){
         return "IDX_I"
     }

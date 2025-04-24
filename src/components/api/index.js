@@ -217,14 +217,33 @@ export default {
 		const securityId=symbolInfo?.ticker?.split(":")[1]
 		const exchangeSegment=getExchangeSegment(symbolInfo.exchangeId,symbolInfo.segment)
 		console.log({securityId,exchangeSegment,symbolInfo})
+		if(resolution!=='1D'){
+			axios.post(`/intraday?symbol=${symbolInfo?.ticker}&resolution=${resolution}&from=${periodParams.from}&to=${periodParams.to}&countback=${periodParams.countBack}&instrument=${symbolInfo.instrument}&exchangeSegment=${exchangeSegment}`,{
+				"securityId": "79514",
+				"exchangeSegment": "NSE_FNO",
+				"instrument": "OPTIDX",
+				"interval": "60",
+				"oi": true,
+				"fromDate": "2025-04-13 09:00:00",
+				"toDate": "2025-04-22 15:30:00"
+				}
+				).then((response) => {
+				onHistoryCallback(response, { noData: false })
+			 }).catch((err)=>{
+				onHistoryCallback([], { noData: true });
+				console.log(`Error occured at getBars ${err}`)
+					 })
+		}
+		else{
+			axios.get(`/history?symbol=${symbolInfo?.ticker}&resolution=${resolution}&from=${periodParams.from}&to=${periodParams.to}&countback=${periodParams.countBack}&instrument=${symbolInfo.instrument}&exchangeSegment=${exchangeSegment}`).then((response) => {
+				onHistoryCallback(response, { noData: false })
+			 }).catch((err)=>{
+				onHistoryCallback([], { noData: true });
+				console.log(`Error occured at getBars ${err}`)
+					 })
+	
+		}
 		
-		 axios.get(`/history?symbol=${symbolInfo?.ticker}&resolution=${resolution}&from=${periodParams.from}&to=${periodParams.to}&countback=${periodParams.countBack}&instrument=${symbolInfo.instrument}&exchangeSegment=${exchangeSegment}`).then((response) => {
-			onHistoryCallback(response, { noData: false })
-		 }).catch((err)=>{
-			onHistoryCallback([], { noData: true });
-			console.log(`Error occured at getBars ${err}`)
-				 })
-
 		
 	},
 		
