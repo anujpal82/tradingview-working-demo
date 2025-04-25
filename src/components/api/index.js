@@ -1,4 +1,5 @@
 import historyProvider from './historyProvider'
+import { sendSubscription } from './stream';
 import { getExchangeSegment } from './utils';
 import axios from './utils/axios';
 import { debounce } from 'lodash';
@@ -248,7 +249,13 @@ export default {
 	},
 		
 	subscribeBars: (symbolInfo, resolution, onRealtimeCallback, subscribeUID, onResetCacheNeededCallback) => {
-		console.log('=====subscribeBars runnning')
+		const subscribePayload={
+			mode:"TICK",
+			exchangeType:"IDX",
+			tokens:[symbolInfo?.ticker?.split(":")[1]],
+
+		}
+		sendSubscription(1,subscribePayload.mode,subscribePayload.exchangeType,subscribePayload.tokens)
 	},
 	unsubscribeBars: subscriberUID => {
 		console.log('=====unsubscribeBars running')

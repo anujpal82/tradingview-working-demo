@@ -2,6 +2,7 @@
 	import './index.css';
 	import { widget } from '../../charting_library';
 	import DataFeed from '../api/index'
+	import './../api/stream'
 
 	function getLanguageFromURL() {
 		const regex = new RegExp('[\\?&]lang=([^&#]*)');
