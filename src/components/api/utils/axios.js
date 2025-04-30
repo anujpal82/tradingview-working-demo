@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:8080/api/tv', // Replace with your API base URL
+    baseURL: 'http://localhost:8080/api', // Replace with your API base URL
     timeout: 10000, // Request timeout in milliseconds
     headers: {
         'Content-Type': 'application/json',
