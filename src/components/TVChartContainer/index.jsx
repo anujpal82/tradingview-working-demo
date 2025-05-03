@@ -4,7 +4,6 @@ import { widget } from "../../charting_library";
 import DataFeed from "../api/index";
 import { getLevels } from "../api/tvRequest";
 import { getExchangeSegment, transformLevels } from "../api/utils";
-import { subscribeToTicks } from "../api/stream";
 
 function getLanguageFromURL() {
   const regex = new RegExp("[\\?&]lang=([^&#]*)");
@@ -16,12 +15,12 @@ function getLanguageFromURL() {
 
 export const TVChartContainer = () => {
   const chartContainerRef = useRef();
-  const drawnLevelsRef = useRef([]); // Store drawn shape references
-  const hasDrawnLevelsRef = useRef(false); // Prevent double draw
-  const dataLoadedListenerRef = useRef(null); // Store dataLoaded listener
+  const drawnLevelsRef = useRef([]);
+  const hasDrawnLevelsRef = useRef(false);
+  const dataLoadedListenerRef = useRef(null);
 
   const defaultProps = {
-    symbol: "NIFTY:13",
+    symbol: "NIFTY$13",
     interval: "60",
     datafeedUrl: "https://demo_feed.tradingview.com",
     libraryPath: "/charting_library/",
@@ -44,7 +43,7 @@ export const TVChartContainer = () => {
     const widgetOptions = {
       symbol: defaultProps.symbol,
       datafeed: DataFeed,
-      interval: defaultProps.interval,
+      interval: defaultProps.interval,  
       container: chartContainerRef.current,
       library_path: defaultProps.libraryPath,
       debug: true,
@@ -75,7 +74,6 @@ export const TVChartContainer = () => {
 
     tvWidget.onChartReady(() => {
       console.log("Chart is ready");
-      
 
       tvWidget.headerReady().then(() => {
         const button = tvWidget.createButton();
@@ -95,9 +93,15 @@ export const TVChartContainer = () => {
 
       const chart = tvWidget.chart();
 
+      // ✅ Fix: Reset price scale on interval change
+      chart.onIntervalChanged().subscribe(null, (interval) => {
+        console.log("Interval changed to:", interval);
+      });
+      
+      
+
       const drawLevels = (chartInstance, levels) => {
         try {
-    
           drawnLevelsRef.current = [];
 
           levels.forEach((level) => {
@@ -132,33 +136,14 @@ export const TVChartContainer = () => {
           chart.onDataLoaded().unsubscribe(dataLoadedListenerRef.current);
         }
 
-        const listener = () => {
-          if (hasDrawnLevelsRef.current) return;
-          hasDrawnLevelsRef.current = true;
-
-          const symbolInfo = chart.symbolExt();
-          const [symbol, securityId] = symbolInfo.ticker.split(":");
-          const cachedSymbolInfo = DataFeed.symbolDataCache[securityId];
-          if (!cachedSymbolInfo) {
-            console.warn("Missing cached symbol info for:", securityId);
-            return;
-          }
-
-          const exchangeSegment = getExchangeSegment(
-            cachedSymbolInfo.exchangeId,
-            cachedSymbolInfo.segment
-          );
-
-          const payload = {
-            securityId: securityId,
-            exchangeSegment: exchangeSegment,
-            instrument: cachedSymbolInfo?.instrument,
-            interval: "60",
-            oi: true,
-            fromDate: "2025-04-15 09:00:00",
-            toDate: "2025-04-23 15:30:00",
-          };
-
+        const listener = (data) => {
+   
+          // const payload = {
+          //   mode,
+          //   exchangeType,
+          //   tokens,
+          // };
+                  
           // getLevels(payload)
           //   .then((response) => {
           //     const transformedLevels = transformLevels(response);
@@ -169,7 +154,6 @@ export const TVChartContainer = () => {
 
         chart.onDataLoaded().subscribe(null, listener);
         dataLoadedListenerRef.current = listener;
-       
       };
 
       chart.onSymbolChanged().subscribe(null, () => {
@@ -196,13 +180,3 @@ export const TVChartContainer = () => {
     />
   );
 };
-
-
-
-
-
-
-
-
-
-

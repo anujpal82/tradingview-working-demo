@@ -5,11 +5,6 @@ import { TVChartContainer } from './components/TVChartContainer/index';
 const App = () => {
 	return (
 		<div className={'App'}>
-			<header className={'App-header'}>
-				<h1 className={'App-title'}>
-					TradingView Charting Library and React Integration Example
-				</h1>
-			</header>
 			<TVChartContainer />
 		</div>
 	);

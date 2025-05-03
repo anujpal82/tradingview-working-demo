@@ -65,7 +65,7 @@ export const getExchangeSegment = (EXCH_ID, SEGMENT,INSTRUMENT) => {
     if (parts.length < 2) return null;
   
     const afterColon = parts[1]; // "13_#_60"
-    const securityId = afterColon.split('_')[0]; // "13"
+    const securityId = afterColon.split('$')[0]; // "13"
   
     return securityId;
   }
