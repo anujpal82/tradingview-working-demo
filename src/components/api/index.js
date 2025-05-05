@@ -126,7 +126,7 @@ export default {
           const mode='TICK';
           const exchangeType=getExchangeSegment(symbolInfo.exchangeId,symbolInfo.segment);
           const tokens=[SECURITY_ID];
-        console.log({exchangeType129:exchangeType})
+          console.log({exchangeType129:exchangeType})
           sendSubscription(mode,exchangeType,tokens)
           onSymbolResolvedCallback(symbolInfo);
         } else {
@@ -184,11 +184,11 @@ export default {
       .then((response) => {
         if (Array.isArray(response) && response.length > 0) {
           // Store the last bar in cache for real-time updates
-          if (periodParams?.firstDataRequest) {
+          // if (periodParams?.firstDataRequest) {
             const lastBar = response[response.length - 1];
             historyCache[`${securityId}-${resolution}`] = { lastBar: lastBar };
             console.log('Stored last bar in cache:', lastBar);
-          }
+          // }
           
           // Log the data we're sending to TradingView
           console.log(`Got ${response.length} bars for ${symbolInfo.ticker} @ ${resolution}`);
@@ -214,7 +214,7 @@ export default {
             // Store the last bar in cache for real-time updates
             if (periodParams?.firstDataRequest) {
               const lastBar = response[response.length - 1];
-              historyCache[securityId] = { lastBar: lastBar };
+              historyCache[`${securityId}-${resolution}`] = { lastBar: lastBar };
               console.log('Stored last bar in cache:', lastBar);
             }
             
@@ -242,7 +242,7 @@ export default {
     const securityId = symbolInfo?.ticker?.split('$')[1];
     console.log({subscribers493:subscribers})
     // Save subscriber information and start listening for ticks
-    // subscribeToTicks(symbolInfo, resolution, securityId, onRealtimeCallback);
+    subscribeToTicks(symbolInfo, resolution, securityId, onRealtimeCallback);
     
     return;
   },

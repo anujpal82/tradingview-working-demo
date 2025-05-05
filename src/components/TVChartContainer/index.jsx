@@ -58,7 +58,7 @@ export const TVChartContainer = () => {
       autosize: defaultProps.autosize,
       studies_overrides: defaultProps.studiesOverrides,
       timezone: "Asia/Kolkata",
-      ticker: "NIFTY:13",
+      ticker: "NIFTY$13",
       time_frames: [
         { text: "1D", resolution: "D", description: "1 Day" },
         { text: "1W", resolution: "W", description: "1 Week" },

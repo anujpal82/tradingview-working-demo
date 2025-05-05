@@ -82,8 +82,10 @@ export const initWebSocket = () => {
     console.log(`Tick received for ${securityId}: price=${price}, volume=${volume}, time=${new Date(timestamp).toISOString()}`);
     console.log({subscribers483:subscribers})
     subscribers.forEach((subInfo, subId) => {
+      console.log({subscribers85:subscribers})
       const subSecurityId = subInfo.symbolInfo?.ticker?.split('$')[1];
       
+      console.log(`bar updpatipn called`)
       if (subSecurityId == securityId) {
         updateBar(subInfo, price, volume, timestamp);
       }
@@ -196,6 +198,7 @@ const getResolutionInMs = (resolution) => {
 //   }
 // };
 const updateBar = (subInfo, price, volume, timestamp) => {
+  console.log({subInfo200:subInfo})
   const { symbolInfo, resolution, onRealtimeCallback } = subInfo;
   const resolutionMs = getResolutionInMs(resolution);
 
@@ -212,6 +215,7 @@ const updateBar = (subInfo, price, volume, timestamp) => {
   const key = `${symbolInfo.ticker}_${resolution}`;
   const [symbol, securityId] = symbolInfo.ticker.split('$');
   let bar = historyCache?.[`${securityId}-${resolution}`]?.lastBar
+  console.log({historyCache218:historyCache})
   const lastBarFromCache = historyCache[`${securityId}-${resolution}`]?.lastBar;
   console.log({lastBarFromCache615: lastBarFromCache});
 
@@ -226,7 +230,7 @@ const updateBar = (subInfo, price, volume, timestamp) => {
       console.log(`Finalizing previous bar: O=${bar.open}, H=${bar.high}, L=${bar.low}, C=${bar.close}, V=${bar.volume}`);
       onRealtimeCallback(lastBarFromCache);
     }
-
+    console.log({historyCache233:historyCache})
     bar = {
       time: currentBarTime,
       open: price,
@@ -236,7 +240,7 @@ const updateBar = (subInfo, price, volume, timestamp) => {
       volume: volume || 0
     };
   } else {
-    console.log(`Updating bar for ${symbolInfo.ticker}: price=${price}, current OHLC=[${bar.open}, ${bar.high}, ${bar.low}, ${bar.close}]`);
+    console.log(`Updating bar for ${symbolInfo.ticker}: price=${price}, current OHLC=[${bar.open}, ${bar.high}, ${bar.low}, ${bar.close}]`,bar);
 
     if (price > bar.high) bar.high = price;
     if (price < bar.low) bar.low = price;
@@ -282,7 +286,7 @@ export const subscribeToTicks = (symbolInfo, resolution, subscribeUID, onRealtim
   console.log(`Subscribing to ticks for ${symbolInfo.ticker} @ ${resolution}, UID: ${subscribeUID}`);
   
   const [symbol, securityId] = symbolInfo.ticker.split('$');
-  const exchangeType = symbolInfo.exchangeId;
+  const exchangeType = getExchangeSegment(symbolInfo.exchangeId, symbolInfo.segment);
   const tokens = [securityId];
 
   console.log({symbolInfo690:symbolInfo,exchangeType288:exchangeType});
@@ -294,6 +298,7 @@ export const subscribeToTicks = (symbolInfo, resolution, subscribeUID, onRealtim
     onRealtimeCallback,
     uid: subscribeUID,
   });
+  console.log({subscriber301:subscribers})
   
   // Initialize lastBars entry with data from historyCache if available
   const lastBarFromCache = historyCache[`${securityId}-${resolution}`]?.lastBar;
